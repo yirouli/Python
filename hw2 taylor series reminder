@@ -1,0 +1,84 @@
+'''In this problem, you will compute the Taylor series of f(x)=exf(x)=ex centered at different points. Write a function taylor(n,a,x) to evaluate the Taylor expansion of order nn of ff centered at aa, at the point xx. In other words, the function should evalute
+tn(x)=∑i=0nf(i)(a)⋅(x−a)ii!
+tn(x)=∑i=0nf(i)(a)⋅(x−a)ii!
+where f(i)f(i) is the iith derivative of ff. You are encouraged to use the functions math.factorial and numpy.exp to implement the equation.
+
+Evaluate this Taylor function for n∈{0,…,4}n∈{0,…,4} with center a=1.0a=1.0 for every coordinate in X (already defined in the starter code). These values should be stored in taylor_vals so that
+
+taylor_vals[n,i] is the Taylor expansion of order nn (tntn) evaluated at X[i].
+In a single graph plot the true value of the function and the Taylor approximations for n∈{0,…,4}n∈{0,…,4}
+This should be a total of 6 lines in one graph (add axis labels, a legend and a title).
+
+The absolute error is defined as the absolute value of the difference between the approximation of f(x)f(x) and the true value of f(x)f(x), specifically,
+err(x)=|f(x)−tn(x)|
+err(x)=|f(x)−tn(x)|
+For each of n∈{0,…,4}n∈{0,…,4} compute the absolute error at each value in X and store them so that
+
+error_vals[n,i] is the absolute error of the Taylor expansion of order nn (tntn) at X[i] with respect to ff.
+In a different graph from the one before you must generate a semi log plot of these errors (command is semilogy()). As before you are required to label the lines and the axis and give a title to the graph.
+
+OUTPUT:
+
+taylor_vals: approximate values of this function evaluated at X. As described before this is a 2D array.
+error_vals: error value of this function evaluated at X. This array is the same shape as the talor_vals array.
+A plot of the function values as described above (remember axis labels, etc.)
+A plot of the error values as described above (remember axis labels, etc.)
+'''
+
+import math
+import numpy as np
+import matplotlib.pyplot as plt
+
+#### nth order derivative of exp(x) is still exp(x)
+def taylor(n,a,x):
+    sum=0;
+    for i in range(0,n+1):
+        sum+=np.exp(a)*((x-a)**i)/math.factorial(i);
+    return(sum) # Implement the function in place of this line
+
+# define X range
+X = np.linspace(-4.,4.,160)
+
+# set X and Y axis of plot
+axes = plt.gca()
+axes.set_xlim([-4.,4.])
+axes.set_ylim([-5.,50.])
+
+#define taylor_vals and error_vals
+m = len(X)
+taylor_vals = np.zeros((5,m))
+error_vals = np.zeros((5,m))
+
+# Here add code to compute taylor_vals and error_vals
+####2D array do taylor and error calculation, each row represent n( from 0 to 4)
+for i in range(0,5):
+    for j in range(0,m):
+        taylor_vals[i,j]=taylor(i,1.0,X[j]);
+        error_vals[i,j]=math.fabs(np.exp(X[j])-taylor_vals[i,j]);
+#plotting code
+plt.plot(X,[np.exp(x) for x in X],'bo',label = 'true value')
+
+# create plots of Taylor expansions here
+#### plot each row separately
+plt.plot(X,[y for y in taylor_vals[0]],'r-',label='taylor_vals for n=0')
+plt.plot(X,[y for y in taylor_vals[1]],'rs',label='taylor_vals for n=1')
+plt.plot(X,[y for y in taylor_vals[2]],'ro',label='taylor_vals for n=2')
+plt.plot(X,[y for y in taylor_vals[3]],'b-',label='taylor_vals for n=3')
+plt.plot(X,[y for y in taylor_vals[4]],'bs',label='taylor_vals for n=4')
+plt.xlabel('value of X')
+plt.ylabel('values from functions')
+plt.title('Plot of Taylor expansion and the true function')
+plt.legend(loc=0)
+#plots for errors come here
+plt.figure()
+####error values
+plt.plot(X,[y for y in error_vals[0]],'r-',label='error_vals for n=0')
+plt.plot(X,[y for y in error_vals[1]],'rs',label='error_vals for n=1')
+plt.plot(X,[y for y in error_vals[2]],'ro',label='error_vals for n=2')
+plt.plot(X,[y for y in error_vals[3]],'b-',label='error_vals for n=3')
+plt.plot(X,[y for y in error_vals[4]],'bs',label='error_vals for n=4')
+plt.xlabel('value of X')
+plt.ylabel('semi log of error values')
+plt.title('Plot of error values')
+plt.legend(loc=0)
+plt.semilogy()
