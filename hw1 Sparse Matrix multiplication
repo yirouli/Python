@@ -1,0 +1,32 @@
+'''
+ You will be given a matrix A as a nested dictionary and a (densely stored) vector x as a numpy array. You will also be given shape, which is a tuple (rows, columns) giving the size of A.
+
+Assign the variable Ax to be a numpy array with the contents of the matrix-vector product AxAx.
+
+The nested dictionary storage for A works as follows:
+
+The outermost dictionary maps the row index of the matrix to another, inner dictionary.
+
+If a given row of A consists of all zeros, its row index will not be present in the dictionary.
+
+The inner, per-row dictionary maps the column index to the value of the actual entry.
+
+If a given entry of A is zero, its row dictionary will not contain an entry for it.
+'''
+
+
+import numpy as np
+
+# matrix vector product of a (n x m) matrix is (n x 1) array
+# first entry of shape is # of row
+n=shape[0];
+#initialize array with all zeros
+Ax=np.zeros(n);
+#do production, need to extract the value by key
+for key in A:
+    row=A[key];
+    rown=key;
+    # with 2-D dictionary, the value here is still a dictionary
+    for key in row:
+        #if the there's key and value, entry change; otherwise, stay 0
+        Ax[rown]+=x[key]*row[key];
