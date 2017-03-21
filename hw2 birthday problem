@@ -1,0 +1,68 @@
+'''
+The birthday problem is a famous problem with an interesting result. It is stated as follows,
+
+"in a set of nn people with randomly distributed birthdays, what is the probability that some pair of them will have the same birthday."
+
+Consider a group of nn people in a room. We denote the birthday of the iith person as bi∈{0,…,364}bi∈{0,…,364}. We want to measure the probability that in this room of nn people at least 2 people have the same birthday. We denote this by the quantity
+
+Pn(∃i,j∈[1,n],i≠j bi=bj)
+Pn(∃i,j∈[1,n],i≠j bi=bj)
+The subscript nn denotes that this value is dependent on nn.
+
+For n=2n=2, Pn=1/365Pn=1/365 while P366=1P366=1. (Think about why this should be the case.)
+
+We will try to infer the behavior of PnPn as a function of nn numerically, by generating many uniformly distributed samples of birthdays and checking whether any pair of birthdays is the same.
+
+To simulate a room of nn random people perform the following steps.
+
+For n∈{2,…,100}n∈{2,…,100}
+generate 1000 samples of nn birthdays and determine how many of the samples have a pair of people with the same birthday
+
+estimate PnPn based on that number (what should this be if kk samples had a duplicate birthday?)
+
+To check for duplicates, you are required to use the python function sorted(). After sorting, your code should determine whether a duplicate exists with O(n)O(n) work.
+
+Use the computed probabilities to determine the minimum number of people needed to make the probability greater than 50%. Store this in the variable perc_50.
+
+Plot the computed probabilities for n∈[2,100]n∈[2,100], make sure to label and format your plot appropriately.
+
+Note: There are numerous mention of 'random' numbers here and so you may be a bit surprised that when you generate these random numbers they always seem to be numbers in the same order. This is because the numbers that you generate are 'simulated random numbers' which give the appearance of being random. You will learn more about this later in the course.
+
+OUTPUT:
+
+prob_n: array giving the computed probability for n∈{2,…,100}n∈{2,…,100} as described above
+perc_50: the minimum nn for which Pn>.5Pn>.5 based on prob_n
+Plot of probability vs n. (Note that this is manually graded, provide appropriate axes labels and a title)
+'''
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+#### initialize data
+perc_50=0;
+prob_n=np.zeros(99);
+#### create prob_n
+for i in range(2,101):
+    count=0;
+    #### 1000samples
+    for j in range(0,1000):
+        b=np.random.randint(366,size=i);
+        sorted(b);
+        ####check duplicate and mark when there's duplicate
+        if len(set(b))!=len(b):
+            count+=1
+        else:
+            count+=0
+    prob_n[i-2]=count/1000.0
+#### find perc_50
+for num in range(0,len(prob_n)):
+    if prob_n[num]>.5:
+        if prob_n[num]<prob_n[perc_50-2]:
+            perc_50=num
+#### plt
+n=np.arange(2,101)
+plt.plot(n,[y for y in prob_n])
+plt.title('probability of having duplicated birthday among n people')
+plt.ylabel('probability')
+plt.xlabel('n')
